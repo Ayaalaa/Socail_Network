@@ -1,0 +1,96 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<div class="container">
+    <strong style="font-size: 1.5em;color:#FFD700 ; margin-left: 1em;">Create post:</strong>
+	<form class = "site" action="/homepage/" method="post">
+		{% csrf_token %}
+		{{form2}}
+		<br>
+		<button class="btn btn-warning" type="submit" style="min-width:300px; margin-left: 4em;">Post</button>
+	</form>
+	<br>
+	<div class="row">
+		<div class="col-7">
+			{% for object in posts_list %}
+			{% if object.userr == request.user %}
+		<div>
+			<div class="card text-white bg-dark mb-3" style="max-width: 80rem;">
+  				<div class="card-header"><a href='/homepage/TimeLine/'>{{object.userr}}</a></div>
+  				<div class="card-body">
+    				<h5 class="card-title">{{object.content}}</h5>
+    				<p class="card-text" style="color:#FFD700; font-size: 1em;">{{object.time}}</p>
+  				</div>
+			</div>
+
+		<a href="/this/{{object.pk}}"> <button class="btn btn-danger" type="button">Like</button> </a>
+        Likes <span class="badge badge-pill badge-light"> {{object.like}}</span>
+        Comments <span class="badge badge-pill badge-light">{{object.comment}}</span><br>
+
+		<strong style="font-size: 1.5em; color: #B8860B;">Comments</strong><br>
+		{% for comnt in comment_list %}
+			{% if comnt.postt.pk == object.pk %}
+				<span style="color:#B8860B; font-size: 1.5em;">{{comnt.userr}}:</span>
+				<span style="font-size: 2em;">{{comnt.comment_content}}</span><br>
+			{% endif %}
+		{% endfor %}
+
+		<form class = "site" action="/homepage/{{object.pk}}/" method="post" role='form_comment'>
+			{% csrf_token %}
+			{{form_comment.comment_content}}
+			<input type="submit" value="Add Comment">
+		</form>
+		</div>
+		<hr>
+
+		{% elif object.userr in friends_list %}
+		<div>
+			<div class="card text-white bg-dark mb-3" style="max-width: 80rem;">
+  				<div class="card-header"><a href='/homepage/TimeLine/{{object.userr.pk}}/'>{{object.userr}}</a></div>
+  				<div class="card-body">
+    				<h5 class="card-title">{{object.content}}</h5>
+    				<p class="card-text" style="color:#FFD700; font-size: 1em;">{{object.time}}</p>
+  				</div>
+			</div>
+
+        <a href="/this/{{object.pk}}"> <button class="btn btn-danger" type="button">Like</button> </a>
+        Likes <span class="badge badge-pill badge-light"> {{object.like}}</span>
+        Comments <span class="badge badge-pill badge-light">{{object.comment}}</span><br>
+
+		<strong style="font-size: 1.5em; color: #B8860B;">Comments: </strong><br>
+		{% for comnt in comment_list %}
+			{% if comnt.postt.pk == object.pk %}
+        		<span style="color:#B8860B; font-size: 1.5em;">{{comnt.userr}}:</span>
+        		<span style="font-size: 2em">{{comnt.comment_content}}</span><br> 
+        	{% endif %}
+		{% endfor %}
+
+		<form class = "site" action="/homepage/{{object.pk}}/" method="post" role='form_comment'>
+			{% csrf_token %}
+			{{form_comment.comment_content}}
+			<input type="submit" value="Add Comment">
+		</form>
+		</div>
+		<hr>
+		{% endif %}
+	    {% endfor %}
+	    </div>
+
+        <div class="col-1"></div>
+
+        <div class="col-3">
+        	<strong style="font-size: 2em; color: black;">People you may know :</strong>
+			{% for user in existing_users %}
+            	{% if not user in friends_list %}
+            	<div class="card text-white bg-warning mb-3" style="max-width: 22rem;">
+            		<div class="card-header"><a href="/homepage/TimeLine/{{user.pk}}/"> <h2 style="color: black;">{{user.username}}</h2></a>
+            		</div>
+           			<div class="card-body">
+            		<h5 class="card-title"><a href="/homepage/add/{{user.pk}}/"> <button class="btn " type="button">Add friend</button> </a></h5>
+            		</div>
+            	</div>
+           		{% endif %}
+        	{% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

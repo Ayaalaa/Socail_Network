@@ -1,0 +1,90 @@
+{% extends "base_layout.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+      {% if not user.is_authenticated %}<br>
+        <p>You are not logged in</p>
+      {% endif %}
+      <div class="col-7">
+        <div class=" create_post">
+          {% if zft == request.user %}
+            <strong style="font-size: 1.5em;color:#FFD700 ; margin-left: 1em;">Create post:</strong><br>
+            <form class = "site" action="/homepage/TimeLine/" method="post">
+	             {% csrf_token %}
+               {{form2}}
+	             <button class="btn btn-warning" type="submit" style="min-width:300px; margin-left: 4em;">Post</button>
+            </form><br>
+          {% else %}
+          <h1><span style="color: #DAA520">{{userr.username}}'s </span>TimeLine</h1><br>
+          {% endif %}
+        </div>
+
+        <div  class="timeline_posts">
+          {% for object in posts_list %}
+          <div class="card text-white bg-dark mb-3" style="max-width: 80rem;">
+            <div class="card-header"><a href='/homepage/TimeLine/{{object.userr.pk}}/' style="color: white">
+              <h2>{{object.userr}}</h2></a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">{{object.content}}</h4>
+              <h5 class="card-text" style="color:#FFD700; font-size: 1em;">{{object.time}}</h5>
+            </div>
+          </div>
+
+          <a href="/thiss/{{object.pk}}"> <button class="btn btn-danger" type="button">Like</button> </a>
+          Likes <span class="badge badge-pill badge-light"> {{object.like}}</span>
+          Comments <span class="badge badge-pill badge-light">{{object.comment}}</span><br>
+
+          <h4 style="color: #B8860B; font-size: 1.5em;">Comments</h4> 
+          {% for comnt in comment_list %}
+          {% if object.pk == comnt.postt.pk %}
+          <span style="color:#B8860B; font-size: 1.5em;">{{ comnt.userr.username}}:</span>
+          <span style="font-size: 2em;">{{comnt.comment_content}}</span><br>
+          {% endif %}
+          {% endfor %}
+
+          <form class = "site" action="/TimeLine/{{object.pk}}/" method="post" role='form_comment'>
+            {% csrf_token %}
+            {{form_comment.comment_content}}
+            <input type="submit" value="Add Comment">
+          </form>
+          <hr>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-2"></div>
+      <div class="col-3">
+        {% if friends_list %}
+        <strong style="font-size: 2em; color: gray;">Friends </strong>
+        {% for friend in friends_list %}
+        <div class="" style="max-width: 22rem;">
+          <div class="">
+            <a href="/homepage/TimeLine/{{friend.pk}}/"> <h2 style="color: black;">{{friend.username}}</h2></a>
+          </div>
+          <div class="">
+            <h5 class=""><a href="/homepage/remove/{{friend.pk}}/">
+              <button class="btn btn-danger" type="button">Remove friend</button> </a></h5>
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

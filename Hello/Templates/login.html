@@ -1,0 +1,44 @@
+{% extends "base_layout.html" %}
+{% block content %}
+<div class="container">
+	<div class="col_lg_4"></div>
+	<div class="col_lg_4">
+		<div class="jumbotron" style="margin-top:100px;">
+
+			<br>
+			<form  style="text-align:center; " class = "site-form" action="/accounts/login/" method="Post">
+	            {% csrf_token %}
+	             {{form.as_p}}
+	            <br>
+	            {% if request.GET.next %}
+                 <input type="hidden" name="next" value="{{ request.GET.next }}">
+                {% endif %}
+	             <input style="text-align:center"  type="submit" value ="Login">
+             <h4>Don't have account ? </h4><br>
+                <a href="/accounts/signup/"><button type="button" class="btn btn_success" >SignUp</button></a>
+
+			</form>
+		</div>
+	</div>
+	<div class="col_lg_4"></div>
+
+</div>
+
+
+{% comment %}
+<h1 style="text-align:center; ">login</h1>
+<form  style="text-align:center; " class = "site-form" action="/accounts/login/" method="Post">
+	{% csrf_token %}
+	{{form.as_p}}
+	<br>
+	{% if request.GET.next %}
+       <input type="hidden" name="next" value="{{ request.GET.next }}">
+    {% endif %}
+	<input type="submit" value ="Login">
+</form>
+{% endcomment %}
+
+
+
+{% endblock %}
+

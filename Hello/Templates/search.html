@@ -1,0 +1,18 @@
+{% extends "base_layout.html" %}
+{% block content %}
+
+Results....
+<br>
+{% if match %}
+   {% for k in match %}
+     {% if request.user.pk == k.pk %}
+     <h1><a href='/homepage/TimeLine/' style="color: red;"> {{k.first_name}} {{k.last_name}}</a></h1>
+
+     {% else %}
+     <h1><a href='/homepage/TimeLine/{{k.pk}}/' style="color: red;"> {{k.first_name}} {{k.last_name}}</a></h1>
+   
+     {% endif %}
+   {% endfor %}
+{% endif %}
+
+{% endblock %}
